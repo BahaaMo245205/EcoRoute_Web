@@ -1,0 +1,201 @@
+{% extends 'layout.html' %}
+
+{% block title %} الرئيسية | EcoRoute {% endblock %}
+
+{% block content %}
+<style>
+    /* Hero Section Styling */
+    .hero-container {
+        background: linear-gradient(135deg, #0d6efd 0%, #00d2ff 100%);
+        border-radius: 0 0 80px 80px;
+        padding: 100px 0 150px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-container::after {
+        content: "";
+        position: absolute;
+        bottom: -10%;
+        right: -5%;
+        width: 300px;
+        height: 300px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+    }
+
+    /* شريط البحث الاحترافي */
+    .search-box-container {
+        margin-top: -70px;
+        z-index: 10;
+        position: relative;
+    }
+
+    .search-card {
+        background: white;
+        border: none;
+        border-radius: 30px;
+        padding: 30px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control-custom {
+        border: 2px solid #f1f3f5;
+        border-radius: 15px;
+        padding: 12px 20px;
+        transition: 0.3s;
+    }
+
+    .form-control-custom:focus {
+        border-color: #0d6efd;
+        box-shadow: none;
+    }
+
+    /* قسم المميزات */
+    .feature-card {
+        border: none;
+        border-radius: 25px;
+        padding: 40px 20px;
+        transition: 0.4s;
+        background: #fff;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    .icon-box {
+        width: 70px;
+        height: 70px;
+        background: #e7f1ff;
+        color: #0d6efd;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 1.8rem;
+    }
+
+    /* زرار الـ Call to Action */
+    .btn-cta {
+        padding: 15px 40px;
+        border-radius: 50px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+</style>
+
+<section class="hero-container text-center">
+    <div class="container">
+        <h1 class="display-3 fw-bolder mb-3">سكتك أسهل.. وتكلفك أقل!</h1>
+        <p class="lead fs-4 opacity-90 mb-5">شارك رحلتك، وفر في بنزينك، وقابل جيرانك في طريقك.</p>
+        <div class="d-flex justify-content-center gap-3">
+            {% if current_user.is_authenticated %}
+            {% if current_user.type_user == "Riders" %}
+            <a href="{{ url_for('trip_routes.AddTrip') }}"
+                class="btn btn-light btn-lg rounded-pill px-5 fw-bold text-primary shadow">أضف رحلتك</a>
+            {% elif current_user.type_user == "Drivers" %}
+            <a href="{{ url_for('trip_routes.Trip') }}"
+                class="btn btn-light btn-lg rounded-pill px-5 fw-bold text-primary shadow">بحث رحلاتك</a>
+            {% endif %}
+            <a href="#features" class="btn btn-outline-light btn-lg rounded-pill px-5 fw-bold">إزاي بنشتغل؟</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<div class="container search-box-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card search-card">
+                <form action="{{ url_for('trip_routes.Trip') }}" method="get" class="row g-3 align-items-center">
+                    <div class="col-md-4">
+                        <label class="small fw-bold text-muted ms-2">منين؟</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-0"><i
+                                    class="fas fa-map-marker-alt text-primary"></i></span>
+                            <input type="text" class="form-control form-control-custom"
+                                placeholder="نقطة التحرك (مثلاً: بركة السبع)" list="start_way_list" name="start_way">
+                            <datalist id="start_way_list">
+                                {% for start in all_trips %}
+                                <option value="{{ start.start_way }}">
+                                    {% endfor %}
+                            </datalist>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="small fw-bold text-muted ms-2">رايح فين؟</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-0"><i
+                                    class="fas fa-flag-checkered text-danger"></i></span>
+                            <input type="text" class="form-control form-control-custom"
+                                placeholder="الوجهة (مثلاً: القاهرة)" name="end_way" list="end_way">
+                            <datalist id="end_way">
+                                {% for end in all_trips %}
+                                <option value="{{ end.end_way }}">
+                                    {% endfor %}
+
+                            </datalist>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-md-4">
+                        <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-sm">
+                            <i class="fas fa-search me-2"></i> استكشف الرحلات
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<section id="features" class="container py-5 mt-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">ليه تختار <span class="text-primary">EcoRoute</span>؟</h2>
+        <p class="text-muted">بنقدملك حلول ذكية لمشاكل المشاوير اليومية</p>
+    </div>
+    <div class="row g-4 text-center">
+        <div class="col-md-4">
+            <div class="card feature-card shadow-sm">
+                <div class="icon-box"><i class="fas fa-wallet"></i></div>
+                <h4 class="fw-bold">وفر فلوسك</h4>
+                <p class="text-muted">قسم تكاليف البنزين والكارتة مع ناس تانية رايحة نفس طريقك.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card feature-card shadow-sm">
+                <div class="icon-box"><i class="fas fa-leaf"></i></div>
+                <h4 class="fw-bold">صديق للبيئة</h4>
+                <p class="text-muted">عربية واحدة أحسن من أربعة! بنقلل الزحمة والانبعاثات الضارة.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card feature-card shadow-sm">
+                <div class="icon-box"><i class="fas fa-shield-alt"></i></div>
+                <h4 class="fw-bold">أمان تام</h4>
+                <p class="text-muted">كل السائقين والركاب متسجلين عندنا ببياناتهم الحقيقية لضمان سلامتك.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container my-5">
+    <div class="p-5 text-center bg-dark text-white rounded-5 shadow-lg position-relative overflow-hidden">
+        <div style="position: relative; z-index: 2;">
+            <h2 class="display-5 fw-bold mb-3">جاهز تبدأ أول رحلة؟</h2>
+            <p class="lead mb-4 opacity-75">انضم لأكتر من 1000 مستخدم بيوفروا يومياً مع EcoRoute.</p>
+            {% if not current_user.is_authenticated %}
+            <a href="{{ url_for('trip_routes.Trip') }}" class="btn btn-primary btn-cta shadow">سجل دخول وابدأ الآن</a>
+            {% endif %}
+        </div>
+        <i class="fas fa-car-side"
+            style="position: absolute; right: -20px; bottom: -20px; font-size: 15rem; opacity: 0.05; transform: rotate(-15deg);"></i>
+    </div>
+</section>
+
+{% endblock %}

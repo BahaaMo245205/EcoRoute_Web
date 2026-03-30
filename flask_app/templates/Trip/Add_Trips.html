@@ -1,0 +1,131 @@
+{% extends 'layout.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<style>
+    /* تحسينات بصرية إضافية */
+    .trip-card {
+        border: none;
+        border-radius: 20px;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    .trip-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15) !important;
+    }
+    .input-group-text {
+        border-right: none;
+        background-color: #f8f9fa;
+        color: #495057;
+    }
+    .form-control, .form-select {
+        border-left: none;
+        padding: 12px;
+        border-radius: 0 10px 10px 0 !important;
+    }
+    .form-control:focus, .form-select:focus {
+        box-shadow: none;
+        border-color: #dee2e6;
+        background-color: #fff;
+    }
+    .input-group:focus-within .input-group-text {
+        border-color: #0d6efd;
+        color: #0d6efd;
+        transition: all 0.3s;
+    }
+    .input-group:focus-within .form-control, 
+    .input-group:focus-within .form-select {
+        border-color: #0d6efd;
+        transition: all 0.3s;
+    }
+    .btn-add-trip {
+        background: linear-gradient(45deg, #0d6efd, #004dc0);
+        border: none;
+        letter-spacing: 0.5px;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-lg-7">
+            <div class="card trip-card shadow-lg">
+                <div class="card-header bg-dark text-white p-4 text-center border-0" style="border-radius: 20px 20px 0 0;">
+                    <div class="icon-box mb-2">
+                        <i class="fas fa-paper-plane fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="fw-bold mb-0">أنشئ رحلة جديدة</h3>
+                    <p class="text-muted small mb-0">املأ البيانات لمشاركة طريقك مع الآخرين</p>
+                </div>
+                
+                <div class="card-body p-4 p-md-5">
+                    <form method="POST" novalidate>
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold small text-uppercase text-muted">اختر مركبتك</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-car-side"></i></span>
+                                {{ form.ChooiceCar(class="form-select" + (" is-invalid" if form.ChooiceCar.errors else "")) }}
+                            </div>
+                            {% for error in form.ChooiceCar.errors %}
+                                <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i> {{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <hr class="my-4 opacity-25">
+
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small text-uppercase text-muted">نقطة الانطلاق</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-location-arrow text-success"></i></span>
+                                    {{ form.StartWay(class="form-control", placeholder="مثلاً: المنوفية") }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small text-uppercase text-muted">وجهة الوصول</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-map-marker-alt text-danger"></i></span>
+                                    {{ form.EndWay(class="form-control", placeholder="مثلاً: القاهرة") }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small text-uppercase text-muted">وقت التحرك</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                    {{ form.Time(class="form-control") }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small text-uppercase text-muted">الكراسي المتاحة</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-couch"></i></span>
+                                    {{ form.ChairCar(class="form-control", placeholder="كم فرد؟") }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-5">
+                            <label class="form-label fw-bold small text-uppercase text-muted">سعر المقعد</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-success-subtle text-success fw-bold">EGP</span>
+                                {{ form.Price(class="form-control", placeholder="حدد السعر المناسب") }}
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" name="Submit" class="btn btn-primary btn-lg btn-add-trip py-3 rounded-3 fw-bold shadow">
+                                <i class="fas fa-plus-circle me-2"></i> نشر الرحلة الآن
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

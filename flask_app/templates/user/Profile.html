@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block title %} الملف الشخصي - {{ current_user.first_name }} {% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-10 col-lg-8">
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+            <div class="card-header bg-dark text-white text-center py-5">
+                <div class="mb-3">
+                    <img src="{{ url_for('static', filename='images/profile/' + current_user.image) }}" 
+                         class="rounded-circle border border-4 border-white shadow-sm" 
+                         style="width: 120px; height: 120px; object-fit: cover;" 
+                         alt="صورة الملف الشخصي">
+                </div>
+                <h2 class="fw-bold mb-1">{{ current_user.first_name }} {{ current_user.last_name }}</h2>
+                <span class="badge rounded-pill bg-secondary px-3">{{ 'سائق' if current_user.type_user == 'Riders' else 'راكب' }}</span>
+            </div>
+
+            <div class="card-body p-4 bg-white">
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small fw-bold">البريد الإلكتروني</label>
+                        <p class="border-bottom pb-2 text-dark">{{ current_user.email }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small fw-bold">رقم الهاتف</label>
+                        <p class="border-bottom pb-2 text-dark">{{ current_user.phone or 'غير مسجل' }}</p>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('user_routes.UpdateProfile') }}" class="btn btn-dark rounded-pill flex-grow-1 py-2">
+                        <i class="fas fa-user-edit me-1"></i> تحديث البيانات
+                    </a>
+                    <a href="{{ url_for('user_routes.ChangePassword') }}" class="btn btn-outline-dark rounded-pill flex-grow-1 py-2">
+                        <i class="fas fa-key me-1"></i> تغيير كلمة السر
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,190 @@
+{% extends 'layout.html' %}
+
+{% block title %} جراج السيارات - EcoRoute {% endblock %}
+
+{% block content %} 
+<div class="row justify-content-center mt-5">
+    <div class="col-md-10 col-lg-8">
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+            <div class="card-header bg-dark text-white text-center py-4">
+                <div class="icon-circle bg-primary bg-opacity-10 d-inline-flex p-3 rounded-circle mb-3">
+                    <i class="fas fa-car-side fa-2x text-primary"></i>
+                </div>
+                <h3 class="mb-0 fw-bold fs-4">إضافة سيارة جديدة للجراج</h3>
+                <p class="mb-0 text-muted small mt-2">املاً البيانات لتتمكن من مشاركة رحلاتك في EcoRoute.</p>
+            </div>
+
+            <div class="card-body p-4 p-md-5 bg-white">
+                <form method="POST" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+
+                    <div class="row">
+                        <div class="col-md-12 mb-4">
+                            <label class="form-label fw-bold text-dark"><i class="fas fa-camera me-2 text-primary"></i>صورة السيارة</label>
+                            <div class="input-group">
+                                {{ form.Car_image(class="form-control border-secondary-subtle py-2") }}
+                            </div>
+                            {% if form.Car_image.errors %}
+                                {% for error in form.Car_image.errors %}
+                                    <span class="text-danger small">{{ error }}</span><br>
+                                {% endfor %}
+                            {% endif %}
+                            <div class="form-text small">يفضل استخدام صور عرضية (16:9).</div>
+                        </div>
+
+                        <div class="col-md-6 mb-4 text-end">
+                            <label class="form-label fw-bold text-dark">ماركة السيارة</label>
+                            {{ form.CarName(class="form-control form-control-lg rounded-3 border-secondary-subtle", placeholder="مثلاً: تويوتا") }}
+                            {% for error in form.CarName.errors %}
+                                <span class="text-danger small ms-2">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-4 text-end">
+                            <label class="form-label fw-bold text-dark">الموديل</label>
+                            {{ form.ModelCar(class="form-control form-control-lg rounded-3 border-secondary-subtle", placeholder="مثلاً: كورولا") }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4 text-end">
+                            <label class="form-label fw-bold text-dark">لون السيارة</label>
+                            {{ form.Color(class="form-control form-control-lg rounded-3 border-secondary-subtle") }}
+                        </div>
+                        <div class="col-md-6 mb-4 text-end">
+                            <label class="form-label fw-bold text-dark">سنة الصنع</label>
+                            {{ form.Year(class="form-control form-control-lg rounded-3 border-secondary-subtle", placeholder="2024") }}
+                        </div>
+                    </div>
+
+                    <div class="row border rounded-4 p-4 mb-4 bg-light bg-opacity-50">
+                        <h6 class="fw-bold mb-3 text-secondary border-bottom pb-2 d-flex align-items-center">
+                            <i class="fas fa-id-card me-2 text-primary"></i>رقم لوحة السيارة
+                        </h6>
+                        <div class="col-md-6 mb-3 text-end">
+                            <label class="form-label small fw-bold">الأرقام</label>
+                            {{ form.CarNumber_num(class="form-control form-control-lg rounded-3 border-primary border-opacity-25 text-center fw-bold", placeholder="1234") }}
+                        </div>
+                        <div class="col-md-6 mb-3 text-end">
+                            <label class="form-label small fw-bold">الحروف</label>
+                            {{ form.CarNumber_words(class="form-control form-control-lg rounded-3 border-primary border-opacity-25 text-center fw-bold", placeholder="أ ب ج") }}
+                        </div>
+                    </div>
+
+                    <div class="d-grid mt-4">
+                        {{ form.submit(class="btn btn-primary btn-lg rounded-3 fw-bold py-3 shadow") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-5 w-75 mx-auto opacity-25">
+
+{% if current_user.type_user == 'Riders' %}
+<div class="container mb-5 px-4">
+    <div class="d-flex align-items-center justify-content-center mb-5">
+        <div class="line flex-grow-1 bg-secondary opacity-25" style="height: 1px;"></div>
+        <h3 class="mx-4 fw-bold text-dark d-flex align-items-center">
+            <i class="fas fa-warehouse me-2 text-primary"></i> سياراتك المسجلة
+        </h3>
+        <div class="line flex-grow-1 bg-secondary opacity-25" style="height: 1px;"></div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for car in cars %}
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden car-card">
+                <div class="card-img-top position-relative overflow-hidden" style="height: 180px; background-color: #e9ecef;">
+                    {% if car.Car_image %}
+                        <img src="{{ url_for('static', filename='images/Car_images/' + car.Car_image) }}" 
+                            class="w-100 h-100 object-fit-cover" 
+                            alt="{{ car.Car_model }}">
+                    {% else %}
+                        <div class="bg-dark d-flex align-items-center justify-content-center text-white h-100">
+                            <i class="fas fa-car fa-4x opacity-25"></i>
+                        </div>
+                    {% endif %}
+                    <div class="position-absolute top-0 end-0 p-2">
+                        <span class="badge bg-primary rounded-pill shadow-sm px-3 py-2">{{ car.year }}</span>
+                    </div>
+                </div>
+                
+                <div class="card-body p-4 text-end">
+                    <h5 class="card-title fw-bold text-dark mb-3">{{ car.Car_name }}</h5>
+                    <div class="car-details mb-4">
+                        <p class="card-text text-secondary mb-1 small d-flex align-items-center justify-content-end gap-2">
+                            {{ car.model_car }} <i class="fas fa-info-circle text-primary opacity-75"></i>
+                        </p>
+                        <p class="card-text text-secondary mb-1 small d-flex align-items-center justify-content-end gap-2">
+                             {{ car.color }} <i class="fas fa-palette text-primary opacity-75"></i>
+                        </p>
+                    </div>
+                    
+                    <div class="plate-box d-flex justify-content-center align-items-center bg-white border border-dark border-2 rounded-2 p-2 fw-bold shadow-sm mb-2">
+                        <span class="mx-1 fs-5">{{ car.CarNumber_words }} | {{ car.CarNumber_num }}</span>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-light border-0 pb-4 px-4">
+                    <div class="row g-2">
+                        <div class="col-6 text-start">
+                            <a href="{{ url_for('car_routes.UpdateCarData', car_id=car.Car_id)}}" class="btn btn-sm btn-outline-dark w-100 rounded-pill py-2">تعديل</a>
+                        </div>
+                        <div class="col-6 text-end">
+                            <a href="{{ url_for('car_routes.delete_car', car_id=car.Car_id) }}" class="btn btn-sm btn-outline-danger w-100 rounded-pill py-2">حذف</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center w-100 py-5">
+            <div class="mb-3 text-muted opacity-25">
+                <i class="fas fa-car-crash fa-5x"></i>
+            </div>
+            <p class="text-muted fs-5">لم تقم بإضافة أي سيارة بعد في جراجك.</p>
+            <a href="#navbarNav" class="btn btn-primary rounded-pill px-4">أضف أول سيارة الآن</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<style>
+    /* تحسينات الـ Input */
+    .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+    }
+
+    /* أنيميشن الكروت */
+    .car-card { 
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        border: 1px solid rgba(0,0,0,0.05) !important;
+    }
+    
+    .car-card:hover { 
+        transform: translateY(-8px); 
+        box-shadow: 0 20px 40px rgba(0,0,0,0.12) !important;
+        border-color: rgba(13, 110, 253, 0.2) !important;
+    }
+
+    /* تصميم اللوحة */
+    .plate-box { 
+        letter-spacing: 3px;
+        background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+        font-family: 'Cairo', sans-serif;
+        min-height: 45px;
+    }
+
+    /* أيقونة الهيدر */
+    .icon-circle {
+        width: 70px;
+        height: 70px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+{% endblock %}

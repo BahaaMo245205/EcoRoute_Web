@@ -1,0 +1,98 @@
+{% extends 'layout.html' %}
+
+{% block title %} تحديث بيانات السيارة - EcoRoute {% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-9 col-lg-7">
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+            
+            <div class="card-header bg-dark text-white text-center py-4">
+                <div class="icon-circle bg-primary bg-opacity-10 d-inline-flex p-3 rounded-circle mb-3">
+                    <i class="fas fa-edit fa-2x text-primary"></i>
+                </div>
+                <h3 class="mb-0 fw-bold fs-4">تحديث بيانات السيارة</h3>
+                <p class="mb-0 text-muted small mt-2">تأكد من دقة البيانات المحدثة لضمان قبول رحلاتك.</p>
+            </div>
+
+            <div class="card-body p-4 p-md-5 bg-white">
+                <form method="POST" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+
+                    <div class="row">
+                        <div class="col-md-12 mb-4">
+                            <label class="form-label fw-bold text-dark"><i class="fas fa-camera me-2 text-primary"></i>تغيير صورة السيارة</label>
+                            {{ form.up_Car_image(class="form-control border-secondary-subtle py-2") }}
+                            {% if form.up_Car_image.errors %}
+                                {% for error in form.up_Car_image.errors %}
+                                    <span class="text-danger small">{{ error }}</span><br>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-4 text-end">
+                            <label class="form-label fw-bold text-dark">ماركة السيارة</label>
+                            {{ form.up_CarName(class="form-control form-control-lg rounded-3 border-secondary-subtle") }}
+                            {% for error in form.up_CarName.errors %}
+                                <span class="text-danger small ms-2">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-4 text-end">
+                            <label class="form-label fw-bold text-dark">الموديل</label>
+                            {{ form.up_ModelCar(class="form-control form-control-lg rounded-3 border-secondary-subtle") }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4 text-end">
+                            <label class="form-label fw-bold text-dark">اللون المحدث</label>
+                            {{ form.up_Color(class="form-control form-control-lg rounded-3 border-secondary-subtle") }}
+                        </div>
+                        <div class="col-md-6 mb-4 text-end">
+                            <label class="form-label fw-bold text-dark">سنة الصنع</label>
+                            {{ form.up_Year(class="form-control form-control-lg rounded-3 border-secondary-subtle") }}
+                        </div>
+                    </div>
+
+                    <div class="row border rounded-4 p-4 mb-5 bg-light bg-opacity-50">
+                        <h6 class="fw-bold mb-3 text-secondary border-bottom pb-2 d-flex align-items-center">
+                            <i class="fas fa-id-card me-2 text-primary"></i>رقم لوحة السيارة المحدث
+                        </h6>
+                        <div class="col-md-6 mb-3 text-end">
+                            <label class="form-label small fw-bold">الأرقام</label>
+                            {{ form.up_CarNumber_num(class="form-control form-control-lg rounded-3 border-primary border-opacity-25 text-center fw-bold") }}
+                        </div>
+                        <div class="col-md-6 mb-3 text-end">
+                            <label class="form-label small fw-bold">الحروف</label>
+                            {{ form.up_CarNumber_words(class="form-control form-control-lg rounded-3 border-primary border-opacity-25 text-center fw-bold") }}
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            {{ form.up_submit(class="btn btn-primary btn-lg w-100 rounded-3 fw-bold py-3 shadow-sm") }}
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{{ url_for('car_routes.AddCar') }}" class="btn btn-outline-secondary btn-lg w-100 rounded-3 py-3">إلغاء</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .icon-circle {
+        width: 70px;
+        height: 70px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+    }
+</style>
+{% endblock %}

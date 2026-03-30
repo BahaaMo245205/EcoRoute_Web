@@ -1,0 +1,61 @@
+{% extends 'layout.html' %}
+
+{% block title %} تحديث الرحلة {% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white text-center py-3 rounded-top-4">
+                    <h3 class="mb-0 fw-bold"><i class="fas fa-edit me-2"></i>تعديل بيانات الرحلة</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-secondary">العربية المستخدمة</label>
+                            {{ form.ChooiceCar(class="form-select form-control-lg shadow-sm") }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-secondary">من (نقطة البداية)</label>
+                                {{ form.StartWay(class="form-control shadow-sm", placeholder="مثلاً: المنوفية") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-secondary">إلى (نقطة الوصول)</label>
+                                {{ form.EndWay(class="form-control shadow-sm", placeholder="مثلاً: القاهرة") }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-secondary">وقت التحرك</label>
+                                {{ form.Time(class="form-control shadow-sm") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-secondary">عدد الكراسي المتاحة</label>
+                                {{ form.ChairCar(class="form-control shadow-sm") }}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-secondary">سعر الفرد (EGP)</label>
+                            {{ form.Price(class="form-control form-control-lg shadow-sm text-success fw-bold") }}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow">
+                                <i class="fas fa-save me-2"></i>حفظ التعديلات
+                            </button>
+                            <a href="{{ url_for('trip_routes.Trip') }}" class="btn btn-light btn-lg rounded-pill">إلغاء</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

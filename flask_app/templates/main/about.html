@@ -1,0 +1,138 @@
+{% extends 'layout.html' %}
+
+{% block title %} عن المشروع | EcoRoute {% endblock %}
+
+{% block content %}
+<style>
+    .about-hero {
+        background: linear-gradient(rgba(13, 110, 253, 0.8), rgba(0, 210, 255, 0.8)), url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+        padding: 120px 0;
+        color: white;
+        border-radius: 0 0 50px 50px;
+        margin-bottom: -50px;
+    }
+
+    .mission-card {
+        border: none;
+        border-radius: 30px;
+        background: white;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        padding: 40px;
+        transition: 0.3s;
+    }
+
+    .stat-box {
+        text-align: center;
+        padding: 30px;
+        background: #f8fafc;
+        border-radius: 25px;
+        border-bottom: 5px solid #0d6efd;
+    }
+
+    .developer-img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border: 8px solid #f1f3f5;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .badge-soft {
+        background: #e7f1ff;
+        color: #0d6efd;
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+</style>
+
+<section class="about-hero text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold">إحنا مين؟ وليه EcoRoute؟</h1>
+        <p class="lead opacity-90 mx-auto" style="max-width: 700px;">مش مجرد تطبيق توصيل، إحنا مجتمع هدفه نخلي مشاويرنا اليومية أسهل، أوفر، وأكتر ذكاءً.</p>
+    </div>
+</section>
+
+<div class="container py-5 mt-5">
+    <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+            <span class="badge-soft">قصتنا</span>
+            <h2 class="fw-bold mb-4">بدأنا من قلب المعاناة اليومية</h2>
+            <p class="text-muted fs-5">في ظل زحمة الطرق وارتفاع تكاليف الوقود، كان لازم نفكر في حل يجمع بين التكنولوجيا وبين احتياجاتنا الحقيقية. **EcoRoute** اتولد عشان يربط بين أصحاب العربيات اللي طريقهم واحد، وبين الركاب اللي بيدوروا على وسيلة مريحة وأوفر.</p>
+            <div class="row g-4 mt-2">
+                <div class="col-6">
+                    <div class="stat-box">
+                        <h3 class="fw-bold text-primary mb-0">+1000</h3>
+                        <small class="text-muted">مستخدم نشط</small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="stat-box">
+                        <h3 class="fw-bold text-success mb-0">30%</h3>
+                        <small class="text-muted">توفير في الوقود</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="mission-card shadow-lg">
+                <h4 class="fw-bold mb-4 text-center"><i class="fas fa-bullseye text-danger me-2"></i>أهدافنا الأساسية</h4>
+                <ul class="list-unstyled">
+                    <li class="mb-4 d-flex">
+                        <i class="fas fa-check-circle text-success fs-4 me-3"></i>
+                        <div>
+                            <h6 class="fw-bold">تقليل التكلفة</h6>
+                            <p class="small text-muted mb-0">مشاركة أعباء البنزين والكارتة بين السائق والركاب بشكل عادل.</p>
+                        </div>
+                    </li>
+                    <li class="mb-4 d-flex">
+                        <i class="fas fa-check-circle text-success fs-4 me-3"></i>
+                        <div>
+                            <h6 class="fw-bold">حماية البيئة</h6>
+                            <p class="small text-muted mb-0">تقليل عدد السيارات في الشوارع يعني انبعاثات كربونية أقل وهواء أنقى.</p>
+                        </div>
+                    </li>
+                    <li class="d-flex">
+                        <i class="fas fa-check-circle text-success fs-4 me-3"></i>
+                        <div>
+                            <h6 class="fw-bold">الأمان والموثوقية</h6>
+                            <p class="small text-muted mb-0">نظام تقييم وتوثيق صارم لضمان رحلة آمنة لكل الأطراف.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="bg-light py-5 mt-5 rounded-5 mx-2 mx-md-5">
+    <div class="container text-center py-4">
+        <span class="badge-soft">خلف الكواليس</span>
+        <h2 class="fw-bold mb-5">مطور المشروع</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="p-4 bg-white rounded-4 shadow-sm border border-top-0">
+                    <img src="{{ url_for('static', filename='images/profile/4178fe7bd4615ca5.jpg') }}" class="rounded-circle developer-img mb-4" alt="Bahaa Mohammed">
+                    <h4 class="fw-bold">Bahaa Mohammed</h4>
+                    <p class="text-primary fw-bold mb-2">Python Developer & IS Student</p>
+                    <p class="text-muted small mb-4 px-md-5">طالب في السنة الثالثة نظم معلومات، مهتم بتطوير تطبيقات الويب وحلول الأمن السيبراني. صممت EcoRoute ليكون نموذجاً للمشاريع التقنية التي تخدم المجتمع المصري.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="https://github.com/BahaaMo245205" class="btn btn-outline-dark btn-sm rounded-circle"><i class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/bahaa-mohamed-6684372a2" class="btn btn-outline-primary btn-sm rounded-circle"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.instagram.com/bah2.brog/" class="btn btn-outline-danger btn-sm rounded-circle"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container py-5 text-center">
+    <p class="text-muted small">© 2026 EcoRoute - جميع الحقوق محفوظة لـ بهاء محمد</p>
+</div>
+{% endblock %}
