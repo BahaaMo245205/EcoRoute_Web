@@ -14,6 +14,7 @@ from flask_app.models import User
 class LoginForm(FlaskForm):
     email = EmailField("Email", validators=[DataRequired(), Email()])
     password = PasswordField("Password", validators=[DataRequired()])
+    show = BooleanField("Show me password")
     remember = BooleanField("Remember Me")
     submit = SubmitField("Login")
 
@@ -33,6 +34,7 @@ class SignupForm(FlaskForm):
         "confirm_password",
         validators=[DataRequired(), Length(min=8, max=20), EqualTo("password")],
     )
+    show = BooleanField("Show me password")
     submit = SubmitField("Signup")
 
     def validate_email(self, email):
@@ -54,6 +56,7 @@ class Reset_passwordForm(FlaskForm):
         "تأكد من الباسورد",
         validators=[DataRequired(), Length(min=8, max=20), EqualTo("password")],
     )
+    show = BooleanField("Show me password")
     submit = SubmitField("تغیر باسورد")
 
     def validate_password(self, password):
