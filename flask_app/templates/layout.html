@@ -164,7 +164,7 @@
                                 </a></li>
 
                             {% if current_user.user_id == 1 %}
-                            <li><a class="dropdown-item" href="#">
+                            <li><a class="dropdown-item" href="{{ url_for('admin.index') }}">
                                     <i class="fas fa-user-shield text-warning"></i> لوحة الإدارة (Admin)
                                 </a></li>
                             {% endif %}
