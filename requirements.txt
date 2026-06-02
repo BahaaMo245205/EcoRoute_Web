@@ -1,7 +1,10 @@
+pillow
+email-validator
 Flask
-Flask-SQLAlchemy
 Flask-Admin
 Flask-Bcrypt
 Flask-Login
+Flask-Mail
 Flask-Migrate
-email-validator
+Flask-SQLAlchemy
+Flask-WTF

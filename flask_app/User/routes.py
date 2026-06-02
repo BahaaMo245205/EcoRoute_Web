@@ -38,11 +38,11 @@ def UpdateProfile():
 
             db.session.commit()
             flash("تم تحديث بيانات ملفك الشخصي بنجاح", "success")
-            return redirect(url_for("user.profile"))
+            return redirect(url_for("user_routes.profile"))
         else :
             for  error in form.errors.values():
                 flash(error[0],'danger')    
-            return redirect(url_for("user.UpdateProfile"))
+            return redirect(url_for("user_routes.UpdateProfile"))
 
     elif request.method == "GET":
         form.first_name.data = current_user.first_name
@@ -71,5 +71,5 @@ def ChangePassword():
                 return redirect(url_for("user.profile"))
             else:
                 flash("كلمة المرور القديمة غير صحيحة", "danger")
-                return redirect(url_for("user.ChangePassword"))
+                return redirect(url_for("user_routes.ChangePassword"))
     return render_template("user/ChangePassword.html", form=form)
