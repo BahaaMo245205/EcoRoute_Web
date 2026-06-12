@@ -7,6 +7,10 @@ from flask_app.models import User, Car, Trip, Bookings
 
 
 class UserModelView(ModelView):
+    can_create = True
+    can_edit = False
+    can_delete = False
+    can_view_details = True
     def on_model_change(self, form, model, is_created):
         model.password = bcrypt.generate_password_hash(model.password).decode("utf-8")
 

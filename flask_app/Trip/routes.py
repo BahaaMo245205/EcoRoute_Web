@@ -28,7 +28,9 @@ def Trip():
         ).all()
     else:
         AllTrips = models.Trip.query.all()
+        
     return render_template("Trip/Trips.html", AllTrips=AllTrips, title="Trips")
+
 
 
 @trip_routes.route("/AddTrip", methods=["GET", "POST"])
@@ -66,7 +68,7 @@ def AddTrip():
             db.session.add(new_trip)
             db.session.commit()
             flash("تم إضافة الرحلة بنجاح", "success")
-            return redirect(url_for("trip.Trip"))
+            return redirect(url_for("trip_routes.Trip"))
         except Exception as e:
             db.session.rollback()
             flash(f"حدث خطأ أثناء الحفظ: {e}", "danger")
@@ -90,7 +92,7 @@ def DeleteTrip(trip_id):
     db.session.delete(delete_trip)
     db.session.commit()
     flash("تم حذف الرحلة بنجاح", "success")
-    return redirect(url_for("trip.Trip"))
+    return redirect(url_for("trip_routes.Trip"))
 
 
 
@@ -118,7 +120,7 @@ def UpdateTrip(trip_id):
 
         db.session.commit()
         flash("تم تحديث بيانات الرحلة بنجاح", "success")
-        return redirect(url_for("trip.Trip"))
+        return redirect(url_for("trip_routes.Trip"))
 
     elif request.method == "GET":
         form.ChooiceCar.data = Update_trip.car_id
@@ -147,7 +149,7 @@ def details_Trips(trip_id):
             return redirect(url_for("trip.Trip"))
         elif int(Chear) > int(trips.chair):
             flash("للأسف العدد اللي طلبته أكتر من الكراسي المتاحة حالياً", "warning")
-            return redirect(url_for('trip.details_Trips', trip_id=trip_id)) 
+            return redirect(url_for('trip_routes.details_Trips', trip_id=trip_id)) 
         else:
             trips.chair = int(trips.chair) - int(Chear)
             AddBooking = models.Bookings(
@@ -158,7 +160,7 @@ def details_Trips(trip_id):
             db.session.add(AddBooking)
             db.session.commit()
             flash(f"تم حجز {Chear} مقاعد بنجاح! رحلة سعيدة.", "success")
-            return redirect(url_for("trip.Trip"))
+            return redirect(url_for("trip_routes.Trip"))
 
     return render_template("Trip/details_Trips.html", trips=trips, title="Details Trip",all_bookings=all_bookings)
 

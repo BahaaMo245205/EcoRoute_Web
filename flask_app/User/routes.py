@@ -29,7 +29,7 @@ def UpdateProfile():
 
             if form.image.data:
                 picture_file = save_picture(form.image.data)
-                user.image = picture_file  # تأكد من اسم الحقل في الـ Model (image ولا image_file؟)
+                user.image = picture_file  
 
             user.first_name = form.first_name.data
             user.last_name = form.last_name.data

@@ -3,7 +3,6 @@ from wtforms import (
     StringField,
     PasswordField,
     SubmitField,
-    SelectField,
     BooleanField,
     EmailField,
 )
@@ -20,14 +19,14 @@ class ProfileForm(FlaskForm):
     last_name = StringField("أسم الأخير", validators=[DataRequired()])
     email = EmailField("أسم البريد الالكتروني", validators=[DataRequired(), Email()])
     phone = StringField(
-        "رقم الهاتف", validators=[DataRequired(), Length(min=11, max=11)]
+        "رقم الهاتف", validators=[DataRequired(), Length(min=10, max=11)]
     )
     submit = SubmitField("تحديث الملف الشخصي")
 
-    def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
-        if user:
-            raise ValidationError("That email is taken. Please choose a different one.")
+    # def validate_email(self, email):
+    #     user = User.query.filter_by(email=email.data).first()
+    #     if user:
+    #         raise ValidationError("That email is taken. Please choose a different one.")
 
     def validate_phone(self, phone):
         user = User.query.filter_by(phone=phone.data).first()
@@ -37,7 +36,7 @@ class ProfileForm(FlaskForm):
 
 class ChangePasswordForm(FlaskForm):
     old_password = PasswordField("باسورد القديمة", validators=[DataRequired()])
-    new_password = PasswordField("باسورد الجديدة", validators=[DataRequired()])
+    new_password = PasswordField("باسورد الجديدة", validators=[DataRequired(), Length(min=8, max=20)])
     confirm_password = PasswordField(
         "أكد الباسورد جديد", validators=[DataRequired(), EqualTo("new_password")]
     )

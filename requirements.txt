@@ -1,10 +1,12 @@
 pillow
 email-validator
+python-dotenv
 Flask
 Flask-Admin
 Flask-Bcrypt
-Flask-Login
+flask_login
 Flask-Mail
 Flask-Migrate
 Flask-SQLAlchemy
 Flask-WTF
+itsdangerous

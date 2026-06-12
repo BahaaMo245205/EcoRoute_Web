@@ -70,7 +70,7 @@ def signup():
             )
             db.session.add(user)
             db.session.commit()
-            flash("Account created successfully", "message")
+            flash("Account created successfully", "success")
             return redirect(url_for("auth.login"))
         else:
             for error in form.errors.values():

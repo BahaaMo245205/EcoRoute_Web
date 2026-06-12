@@ -22,6 +22,7 @@ def AddCar():
                 Car_image = picture_file
             else:
                 Car_image = "car.png"
+            
             CarName = form.CarName.data
             ModelCar = form.ModelCar.data
             Color = form.Color.data
@@ -41,7 +42,7 @@ def AddCar():
             db.session.add(car)
             db.session.commit()
             flash("تم الاضافة بنجاح", "success")
-            return redirect(url_for("car.AddCar"))
+            return redirect(url_for("car_routes.AddCar"))
     
     cars = Car.query.filter_by(user_id=current_user.user_id).all()
 
