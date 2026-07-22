@@ -34,7 +34,7 @@ def UpdateProfile():
             user.first_name = form.first_name.data
             user.last_name = form.last_name.data
             user.email = form.email.data
-            user.phone = form.phone.data
+            user.phone = str(form.phone.data)
 
             db.session.commit()
             flash("تم تحديث بيانات ملفك الشخصي بنجاح", "success")
