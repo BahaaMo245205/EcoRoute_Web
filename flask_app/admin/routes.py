@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import current_user, login_required
+from flask_app.models import User, Car, Trip, Bookings
+from flask_app import admin_dashboard, db, bcrypt
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import AdminIndexView
-from flask_app import admin_dashboard, db, bcrypt
-from flask_app.models import User, Car, Trip, Bookings
+from flask_login import current_user
+from flask import Blueprint
 
 
 class UserModelView(ModelView):
@@ -11,6 +11,7 @@ class UserModelView(ModelView):
     can_edit = False
     can_delete = False
     can_view_details = True
+
     def on_model_change(self, form, model, is_created):
         model.password = bcrypt.generate_password_hash(model.password).decode("utf-8")
 

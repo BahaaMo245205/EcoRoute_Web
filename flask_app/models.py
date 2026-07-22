@@ -56,8 +56,8 @@ class Car(db.Model):
     color = db.Column(db.String(120), unique=False, nullable=False)
     year = db.Column(db.String(120), unique=False, nullable=False)
 
-    CarNumber_words = db.Column(db.String(120),  nullable=False)
-    CarNumber_num = db.Column(db.String(120),  nullable=False)
+    CarNumber_words = db.Column(db.String(120), nullable=False)
+    CarNumber_num = db.Column(db.String(120), nullable=False)
     Trips = db.relationship("Trip", backref="Trip_car", lazy=True)
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)

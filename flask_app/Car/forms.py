@@ -1,7 +1,7 @@
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, Length
 from flask_wtf.file import FileField, FileAllowed
+from wtforms import StringField, SubmitField
+from flask_wtf import FlaskForm
 
 
 class AddCarForm(FlaskForm):

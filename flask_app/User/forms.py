@@ -36,7 +36,9 @@ class ProfileForm(FlaskForm):
 
 class ChangePasswordForm(FlaskForm):
     old_password = PasswordField("باسورد القديمة", validators=[DataRequired()])
-    new_password = PasswordField("باسورد الجديدة", validators=[DataRequired(), Length(min=8, max=20)])
+    new_password = PasswordField(
+        "باسورد الجديدة", validators=[DataRequired(), Length(min=8, max=20)]
+    )
     confirm_password = PasswordField(
         "أكد الباسورد جديد", validators=[DataRequired(), EqualTo("new_password")]
     )

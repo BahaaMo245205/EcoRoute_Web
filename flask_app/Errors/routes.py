@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template
 
 errors = Blueprint(
     "errors", __name__, template_folder="templates", static_folder="static"

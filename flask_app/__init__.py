@@ -2,11 +2,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
-from config import Config as C
 from flask_admin import Admin
 from flask_mail import Mail
 from flask import Flask
-
+from config import Config
 
 login_manager = LoginManager()
 admin_dashboard = Admin()
@@ -20,7 +19,7 @@ login_manager.login_message_category = "info"
 login_manager.login_view = "auth.login"
 
 
-def create_app(config_calss=C):
+def create_app(config_calss=Config):
     app = Flask(__name__)
     app.config.from_object(config_calss)
     from flask_app.admin.routes import MyAdminIndexView
