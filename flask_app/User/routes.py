@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 from flask_app.User.helpr import save_picture
 from flask_app.models import Car, User
 from flask_app import db, bcrypt
+import os
 
 user_routes = Blueprint(
     "user_routes", __name__, template_folder="templates", static_folder="static"
@@ -28,13 +29,24 @@ def UpdateProfile():
             user = User.query.filter_by(email=form.email.data).first()
 
             if form.image.data:
+                if user.image and user.image != "user.png":
+                    is_found = os.path.exists(
+                        "./flask_app/static/images/profile/{}".format(user.image)
+                    )
+                    print(is_found)
+                    if is_found :
+                        os.remove(
+                            r"./flask_app/static/images/profile/{}".format(user.image)
+                        )
+
                 picture_file = save_picture(form.image.data)
                 user.image = picture_file
 
             user.first_name = form.first_name.data
             user.last_name = form.last_name.data
             user.email = form.email.data
-            user.phone = str(form.phone.data)
+            if user.phone != form.phone.data:
+                user.phone = str(form.phone.data)
 
             db.session.commit()
             flash("تم تحديث بيانات ملفك الشخصي بنجاح", "success")
@@ -42,6 +54,7 @@ def UpdateProfile():
         else:
             for error in form.errors.values():
                 flash(error[0], "danger")
+
             return redirect(url_for("user_routes.UpdateProfile"))
 
     elif request.method == "GET":

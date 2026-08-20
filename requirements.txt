@@ -10,3 +10,6 @@ Flask-Migrate
 Flask-SQLAlchemy
 Flask-WTF
 itsdangerous
+zxcvbn-python
+Authlib
+requests

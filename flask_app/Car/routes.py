@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 from flask_app.Car.helpr import save_picture
 from flask_app.models import Car
 from flask_app import db
+import os
 
 car_routes = Blueprint(
     "car_routes", __name__, template_folder="templates", static_folder="static"
@@ -20,6 +21,7 @@ def AddCar():
     if request.method == "POST":
         if form.validate_on_submit():
             if form.Car_image.data:
+                
                 picture_file = save_picture(form.Car_image.data)
                 Car_image = picture_file
             else:
@@ -61,8 +63,12 @@ def UpdateCarData(car_id):
     if request.method == "POST":
         if form.validate_on_submit():
             if form.up_Car_image.data:
-                picture_file = save_picture(form.up_Car_image.data)
-                Car_image = picture_file
+                if user_car.Car_image and user_car.Car_image != "car.png":
+                    is_found = os.path.exists("./flask_app/static/images/Car_images/{}".format(user_car.Car_image))
+                    if is_found :
+                        os.remove("./flask_app/static/images/Car_images/{}".format(user_car.Car_image))
+                    picture_file = save_picture(form.up_Car_image.data)
+                    Car_image = picture_file
             else:
                 Car_image = "car.png"
             user_car.Car_image = Car_image

@@ -104,10 +104,10 @@
                 </nav>
 
                 <div class="position-relative">
-                    <img src="{{ url_for('static', filename='images/Car_images/' + trips.car_image) }}"
+                    <img src="{{url_for('static', filename='images/Car_images/' +  Car_image) }}"
                         class="main-car-img mb-4" alt="Car">
                     {% if trips.user_id != current_user.user_id %}
-                        {% if trips.chear == 0 %}
+                        {% if chaires > 0 %}
                             <span class="badge bg-success position-absolute top-0 end-0 m-4 py-2 px-4 rounded-pill shadow">متاحة
                                 الآن</span>
                         {% else %}
@@ -288,7 +288,7 @@
                         </td>
                         <td>
                             <small class="text-muted">
-                                <i class="far fa-clock me-1"></i> {{ booking.Time }}
+                                <i class="far fa-clock me-1"></i> {{ time }}
                             </small>
                         </td>
                         <td>

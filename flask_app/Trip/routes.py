@@ -1,11 +1,10 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash ,abort
+from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
 from flask_app.Trip.forms import AddTripForm, UpdateTripForm
 from flask_app.models import Car
 from flask_app import models
 from flask_app import db
 from flask_login import login_required, current_user
 from datetime import datetime
-
 
 trip_routes = Blueprint(
     "trip_routes", __name__, template_folder="templates", static_folder="static"
@@ -28,9 +27,8 @@ def Trip():
         ).all()
     else:
         AllTrips = models.Trip.query.all()
-        
-    return render_template("Trip/Trips.html", AllTrips=AllTrips, title="Trips")
 
+    return render_template("Trip/Trips.html", AllTrips=AllTrips, title="Trips")
 
 
 @trip_routes.route("/AddTrip", methods=["GET", "POST"])
@@ -38,7 +36,7 @@ def Trip():
 def AddTrip():
     if current_user.type_user != "Riders":
         abort(403)
-    
+
     form = AddTripForm()
 
     user_cars = Car.query.filter_by(user_id=current_user.user_id).all()
@@ -95,8 +93,6 @@ def DeleteTrip(trip_id):
     return redirect(url_for("trip_routes.Trip"))
 
 
-
-
 @trip_routes.route("/Trip/<int:trip_id>/Update", methods=["GET", "POST"])
 @login_required
 def UpdateTrip(trip_id):
@@ -149,7 +145,7 @@ def details_Trips(trip_id):
             return redirect(url_for("trip.Trip"))
         elif int(Chear) > int(trips.chair):
             flash("للأسف العدد اللي طلبته أكتر من الكراسي المتاحة حالياً", "warning")
-            return redirect(url_for('trip_routes.details_Trips', trip_id=trip_id)) 
+            return redirect(url_for("trip_routes.details_Trips", trip_id=trip_id))
         else:
             trips.chair = int(trips.chair) - int(Chear)
             AddBooking = models.Bookings(
@@ -162,7 +158,15 @@ def details_Trips(trip_id):
             flash(f"تم حجز {Chear} مقاعد بنجاح! رحلة سعيدة.", "success")
             return redirect(url_for("trip_routes.Trip"))
 
-    return render_template("Trip/details_Trips.html", trips=trips, title="Details Trip",all_bookings=all_bookings)
+    return render_template(
+        "Trip/details_Trips.html",
+        trips=trips,
+        chaires=int(trips.chair),
+        Car_image=trips.car_image,
+        time=trips.time,
+        title="Details Trip",
+        all_bookings=all_bookings,
+    )
 
 
 # @trip_bp.route('/Trip/<int:trip_id>/Booking', methods=['GET', 'POST'])

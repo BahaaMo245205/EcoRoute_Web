@@ -4,8 +4,9 @@ from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_admin import Admin
 from flask_mail import Mail
-from flask import Flask
 from config import Config
+from flask import Flask
+import redis.asyncio as redis
 
 login_manager = LoginManager()
 admin_dashboard = Admin()
@@ -17,7 +18,6 @@ mail = Mail()
 login_manager.login_message = "يرجى تسجيل الدخول للوصول إلى هذه الصفحة"
 login_manager.login_message_category = "info"
 login_manager.login_view = "auth.login"
-
 
 def create_app(config_calss=Config):
     app = Flask(__name__)
@@ -32,7 +32,7 @@ def create_app(config_calss=Config):
     admin_dashboard.init_app(app, index_view=MyAdminIndexView())
     with app.app_context():
         from flask_app import models
-
+        
     from flask_app.User.routes import user_routes
     from flask_app.Trip.routes import trip_routes
     from flask_app.Car.routes import car_routes

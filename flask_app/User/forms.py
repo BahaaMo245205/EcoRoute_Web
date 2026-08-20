@@ -11,10 +11,13 @@ from flask_wtf.file import FileField, FileAllowed
 from flask_app.models import User
 from flask_app import bcrypt
 from flask_login import current_user
+import re
 
 
 class ProfileForm(FlaskForm):
-    image = FileField("الصورة الشخصية", validators=[FileAllowed(["jpg", "png"])])
+    image = FileField(
+        "الصورة الشخصية", validators=[FileAllowed(["jpg", "png", "jpeg"])]
+    )
     first_name = StringField("أسم الأول", validators=[DataRequired()])
     last_name = StringField("أسم الأخير", validators=[DataRequired()])
     email = EmailField("أسم البريد الالكتروني", validators=[DataRequired(), Email()])
@@ -28,10 +31,10 @@ class ProfileForm(FlaskForm):
     #     if user:
     #         raise ValidationError("That email is taken. Please choose a different one.")
 
-    def validate_phone(self, phone):
-        user = User.query.filter_by(phone=phone.data).first()
-        if user:
-            raise ValidationError("That phone is taken. Please choose a different one.")
+    # def validate_phone(self, phone):
+    #     user = User.query.filter_by(phone=phone.data).first()
+    #     if user:
+    #         raise ValidationError("That phone is taken. Please choose a different one.")
 
 
 class ChangePasswordForm(FlaskForm):
@@ -52,6 +55,18 @@ class ChangePasswordForm(FlaskForm):
     def validate_new_password(self, new_password):
         if len(new_password.data) < 8:
             raise ValidationError("Password must be at least 8 characters long")
+
+        if not re.search("[a-z]", new_password.data):
+            raise ValidationError("Password must contain at least one lowercase letter")
+
+        if not re.search("[A-Z]", new_password.data):
+            raise ValidationError("Password must contain at least one uppercase letter")
+
+        if not re.search('[!@#$%^&*(),.?":{}|<>]', new_password.data):
+            raise ValidationError(
+                "Password must contain at least one special character"
+            )
+
         if not any(char.isdigit() for char in new_password.data):
             raise ValidationError("Password must contain at least one number")
 

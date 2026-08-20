@@ -107,7 +107,7 @@
     <div class="row g-4">
         {% if AllTrips %}
         {% for trip in AllTrips %}
-        
+
         <div class="col-md-6 col-lg-4">
             <div class="card trip-card shadow-sm h-100">
                 <div class="car-img-container">
@@ -182,14 +182,22 @@
         </div>
         {% endfor %}
         {% else %}
+        {% if current_user.type_user == 'Riders'%}
         <div class="col-12 text-center py-5">
             <div class="mb-4">
                 <i class="fas fa-car-side fa-4x text-light"></i>
             </div>
             <h4 class="text-muted">لا توجد رحلات متاحة حالياً</h4>
             <p class="text-secondary">كن أول من يضيف رحلة في منطقتك!</p>
-            <a href="{{ url_for('trip_routes.AddTrip') }}" class="btn btn-primary rounded-pill mt-2 px-4">أضف رحلة الآن</a>
+            <a href="{{ url_for('trip_routes.AddTrip') }}" class="btn btn-primary rounded-pill mt-2 px-4">أضف رحلة
+                الآن</a>
         </div>
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <h4 class="text-muted">لا توجد رحلات متاحة حالياً</h4>
+            <p class="text-secondary">كن أول من يضيف رحلة في منطقتك!</p>
+        </div>
+        {% endif %}
         {% endif %}
     </div>
 </div>

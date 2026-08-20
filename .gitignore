@@ -24,6 +24,7 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+*.json
 
 # Flask
 instance/
@@ -76,7 +77,10 @@ htmlcov/
 docker-compose.override.yml
 
 # Migrations (optional, depend on your workflow)
-# migrations/
+migrations/
 
 # Uploaded files
-flask_app/static/uploads/
+*.png
+*.jpg
+*.jpeg
+*.icon

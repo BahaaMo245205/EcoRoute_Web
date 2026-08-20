@@ -8,7 +8,8 @@ from flask_app.auth.forms import (
 from flask_app.models import User
 from flask_app import db, bcrypt, mail
 from flask_mail import Message
-from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import login_user, logout_user, current_user
+from authlib.integrations.flask_client import OAuth
 
 auth = Blueprint("auth", __name__, template_folder="templates", static_folder="static")
 
@@ -57,6 +58,7 @@ def signup():
     form = SignupForm()
     if request.method == "POST":
         if form.validate_on_submit():
+            
             hash_pass = bcrypt.generate_password_hash(form.password.data).decode(
                 "utf-8"
             )
@@ -80,6 +82,7 @@ def signup():
     return render_template("auth_html/signup.html", form=form)
 
 
+
 @auth.route("/Forget_password", methods=["GET", "POST"])
 def Forget():
     if current_user.is_authenticated:
@@ -93,7 +96,7 @@ def Forget():
                 "An email has been sent with instructions to reset your password.",
                 "info",
             )
-            return redirect(url_for("auth.login"))
+            return redirect(url_for("auth.login"),code=201)
 
     return render_template("auth_html/Forgetpassword.html", form=form)
 

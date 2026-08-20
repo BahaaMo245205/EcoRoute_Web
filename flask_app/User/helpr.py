@@ -4,7 +4,7 @@ import secrets
 import os
 
 
-def save_picture(form_picture):
+def save_picture(form_picture) -> str | None:
     form_picture.seek(0, os.SEEK_END)
     file_size = form_picture.tell()
     form_picture.seek(0)

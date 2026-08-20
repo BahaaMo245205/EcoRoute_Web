@@ -9,6 +9,7 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
 from flask_app.models import User
+import re
 
 
 class LoginForm(FlaskForm):
@@ -47,6 +48,28 @@ class SignupForm(FlaskForm):
         if user:
             raise ValidationError("That phone is taken. Please choose a different one.")
 
+    def validate_password(self, password:SignupForm):
+        if len(password.data) < 8:
+            raise ValidationError("Password must be at least 8 characters long.")
+
+        if not re.search("[a-z]", password.data):
+            raise ValidationError(
+                "Password must contain at least one lowercase letter."
+            )
+
+        if not re.search("[A-Z]", password.data):
+            raise ValidationError(
+                "Password must contain at least one uppercase letter."
+            )
+
+        if not re.search("[0-9]", password.data):
+            raise ValidationError("Password must contain at least one number.")
+
+        if not re.search('[!@#$%^&*(),.?":{}|<>]', password.data):
+            raise ValidationError(
+                "Password must contain at least one special character."
+            )
+
 
 class Reset_passwordForm(FlaskForm):
     password = PasswordField(
@@ -62,6 +85,24 @@ class Reset_passwordForm(FlaskForm):
     def validate_password(self, password):
         if len(password.data) < 8:
             raise ValidationError("Password must be at least 8 characters long.")
+
+        if not re.search("[a-z]", password.data):
+            raise ValidationError(
+                "Password must contain at least one lowercase letter."
+            )
+
+        if not re.search("[A-Z]", password.data):
+            raise ValidationError(
+                "Password must contain at least one uppercase letter."
+            )
+
+        if not re.search("[0-9]", password.data):
+            raise ValidationError("Password must contain at least one number.")
+
+        if not re.search('[!@#$%^&*(),.?":{}|<>]', password.data):
+            raise ValidationError(
+                "Password must contain at least one special character."
+            )
 
         if self.password.data != self.confirm_password.data:
             raise ValidationError("Passwords do not match.")
