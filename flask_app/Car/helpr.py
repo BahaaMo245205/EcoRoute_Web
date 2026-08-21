@@ -1,7 +1,8 @@
+import os
+import secrets
+
 from flask import current_app
 from PIL import Image
-import secrets
-import os
 
 
 def save_picture(form_picture, folder_name="Car_images"):
@@ -15,7 +16,6 @@ def save_picture(form_picture, folder_name="Car_images"):
             in [".png", ".jpg", ".jpeg"]
             and file_size <= 16 * 1024 * 1024
         ):
-
             random_hex = secrets.token_hex(8)
             _, f_ext = os.path.splitext(form_picture.filename)
             picture_fn = random_hex + f_ext

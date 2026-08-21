@@ -1,10 +1,12 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_app.User.forms import ProfileForm, ChangePasswordForm
-from flask_login import login_required, current_user
-from flask_app.User.helpr import save_picture
-from flask_app.models import Car, User
-from flask_app import db, bcrypt
 import os
+
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required
+
+from flask_app import bcrypt, db
+from flask_app.models import Bookings, Car, User
+from flask_app.User.forms import ChangePasswordForm, ProfileForm
+from flask_app.User.helpr import save_picture
 
 user_routes = Blueprint(
     "user_routes", __name__, template_folder="templates", static_folder="static"
@@ -15,8 +17,9 @@ user_routes = Blueprint(
 @login_required
 def profile():
     car = Car.query.filter_by(user_id=current_user.user_id).all()
+    bookings = Bookings.query.filter_by(user_id=current_user.user_id).all()
 
-    return render_template("user/Profile.html", cars=car)
+    return render_template("user/Profile.html", cars=car,all_bookings=bookings)
 
 
 @user_routes.route("/UpdateProfile", methods=["GET", "POST"])
@@ -25,19 +28,16 @@ def UpdateProfile():
     form = ProfileForm()
     if request.method == "POST":
         if form.validate_on_submit():
-
             user = User.query.filter_by(email=form.email.data).first()
 
             if form.image.data:
                 if user.image and user.image != "user.png":
                     is_found = os.path.exists(
-                        "./flask_app/static/images/profile/{}".format(user.image)
+                        f"./flask_app/static/images/profile/{user.image}"
                     )
                     print(is_found)
-                    if is_found :
-                        os.remove(
-                            r"./flask_app/static/images/profile/{}".format(user.image)
-                        )
+                    if is_found:
+                        os.remove(rf"./flask_app/static/images/profile/{user.image}")
 
                 picture_file = save_picture(form.image.data)
                 user.image = picture_file
@@ -72,17 +72,16 @@ def UpdateProfile():
 @login_required
 def ChangePassword():
     form = ChangePasswordForm()
-    if request.method == "POST":
-        if form.validate_on_submit():
-            if bcrypt.check_password_hash(
-                current_user.password, form.old_password.data
-            ):
-                hash_password = bcrypt.generate_password_hash(form.new_password.data)
-                current_user.password = hash_password
-                db.session.commit()
-                flash("تم تغيير كلمة المرور بنجاح", "success")
-                return redirect(url_for("user_routes.profile"))
-            else:
-                flash("كلمة المرور القديمة غير صحيحة", "danger")
-                return redirect(url_for("user_routes.ChangePassword"))
+    if request.method == "POST" and form.validate_on_submit():
+        if bcrypt.check_password_hash(
+            current_user.password, form.old_password.data
+        ):
+            hash_password = bcrypt.generate_password_hash(form.new_password.data)
+            current_user.password = hash_password
+            db.session.commit()
+            flash("تم تغيير كلمة المرور بنجاح", "success")
+            return redirect(url_for("user_routes.profile"))
+        else:
+            flash("كلمة المرور القديمة غير صحيحة", "danger")
+            return redirect(url_for("user_routes.ChangePassword"))
     return render_template("user/ChangePassword.html", form=form)

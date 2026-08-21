@@ -1,9 +1,10 @@
-from flask_app.models import User, Car, Trip, Bookings
-from flask_app import admin_dashboard, db, bcrypt
-from flask_admin.contrib.sqla import ModelView
-from flask_admin import AdminIndexView
-from flask_login import current_user
 from flask import Blueprint
+from flask_admin import AdminIndexView
+from flask_admin.contrib.sqla import ModelView
+from flask_login import current_user
+
+from flask_app import admin_dashboard, bcrypt, db
+from flask_app.models import Bookings, Car, Trip, User
 
 
 class UserModelView(ModelView):

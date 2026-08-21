@@ -176,7 +176,7 @@
                                 <div class="col-6">
                                     <div class="info-badge p-3 rounded-4">
                                         <i class="far fa-clock text-primary d-block mb-2 fs-4"></i>
-                                        <span class="d-block fw-bold">{{ trips.time }}</span>
+                                        <span class="d-block fw-bold">{{ trips.time.strftime("%Y-%m-%d %I:%M %p") }}</span>
                                         <small class="text-muted">وقت التحرك</small>
                                     </div>
                                 </div>
@@ -288,7 +288,7 @@
                         </td>
                         <td>
                             <small class="text-muted">
-                                <i class="far fa-clock me-1"></i> {{ time }}
+                                <i class="far fa-clock me-1"></i> {{ booking.Time.strftime("%Y-%m-%d %I:%M %p")}}
                             </small>
                         </td>
                         <td>

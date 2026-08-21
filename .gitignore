@@ -25,7 +25,7 @@ wheels/
 .installed.cfg
 *.egg
 *.json
-
+migrations/
 # Flask
 instance/
 .webassets-cache

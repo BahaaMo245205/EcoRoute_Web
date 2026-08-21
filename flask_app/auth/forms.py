@@ -1,15 +1,17 @@
+import re
+
 from flask_wtf import FlaskForm
 from wtforms import (
-    StringField,
-    PasswordField,
-    SubmitField,
-    SelectField,
     BooleanField,
     EmailField,
+    PasswordField,
+    SelectField,
+    StringField,
+    SubmitField,
 )
-from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
+
 from flask_app.models import User
-import re
 
 
 class LoginForm(FlaskForm):
@@ -48,7 +50,7 @@ class SignupForm(FlaskForm):
         if user:
             raise ValidationError("That phone is taken. Please choose a different one.")
 
-    def validate_password(self, password:SignupForm):
+    def validate_password(self, password: SignupForm):
         if len(password.data) < 8:
             raise ValidationError("Password must be at least 8 characters long.")
 

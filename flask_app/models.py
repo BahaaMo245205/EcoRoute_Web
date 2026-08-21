@@ -1,9 +1,9 @@
-from flask_app import db, create_app
-from flask_app import login_manager
+
 from flask_login import UserMixin
-from datetime import datetime
 from itsdangerous import URLSafeSerializer
+
 from config import Config as C
+from flask_app import db, login_manager
 
 
 @login_manager.user_loader
@@ -76,7 +76,7 @@ class Bookings(db.Model):
         "Trip_id", db.Integer, db.ForeignKey("trip.trip_id"), nullable=False
     )
     Time = db.Column(
-        "Time", db.String(120), unique=False, nullable=False, default=datetime.utcnow
+        "Time", db.DateTime, unique=False, nullable=False
     )
     requested_chairs = db.Column("requested_chairs", db.Integer, nullable=False)
 
@@ -95,7 +95,7 @@ class Trip(db.Model):
     car_color = db.Column(db.String(120), unique=False, nullable=False)
     start_way = db.Column(db.String(120), unique=False, nullable=False)
     end_way = db.Column(db.String(120), unique=False, nullable=False)
-    time = db.Column(db.String(120), unique=False, nullable=False)
+    time = db.Column(db.DateTime, unique=False, nullable=False)
     price = db.Column(db.String(120), unique=False, nullable=False)
     chair = db.Column(db.String(120), unique=False, nullable=False)
     bookings = db.relationship("Bookings", backref="trip", lazy=True)

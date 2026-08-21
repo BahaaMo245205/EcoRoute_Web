@@ -1,7 +1,9 @@
-from wtforms.validators import DataRequired, Length
-from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, SubmitField
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileAllowed, FileField
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired, Length, ValidationError
+
+from ..models import Car
 
 
 class AddCarForm(FlaskForm):
@@ -18,6 +20,17 @@ class AddCarForm(FlaskForm):
         "CarNumber_words", validators=[DataRequired(), Length(min=1, max=5)]
     )
     submit = SubmitField("إضافة السياره")
+
+    def validate_CarNumber_num(self, field):
+        data_car = Car.query.filter_by(
+            CarNumber_num=self.CarNumber_num.data,
+            CarNumber_words=self.CarNumber_words.data,
+        ).first()
+
+        if data_car:
+            raise ValidationError(
+                "رقم اللوحة هذا (الأرقام والحروف) مسجل بالفعل لسيارة أخرى."
+            )
 
 
 class UpdateCar(FlaskForm):

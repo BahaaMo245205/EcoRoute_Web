@@ -5,10 +5,12 @@
 {% block content %}
 <div class="row justify-content-center mt-5">
     <div class="col-md-10 col-lg-8">
-        <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+        
+        <!-- كارت البيانات الشخصية -->
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden mb-5">
             <div class="card-header bg-dark text-white text-center py-5">
                 <div class="mb-3">
-                    <img src="{{ url_for('static', filename='images/profile/' + current_user.image) }}" 
+                    <img src="{{ url_for('static', filename='images/profile/' + (current_user.image if current_user.image else 'default.jpg')) }}" 
                          class="rounded-circle border border-4 border-white shadow-sm" 
                          style="width: 120px; height: 120px; object-fit: cover;" 
                          alt="صورة الملف الشخصي">
@@ -21,11 +23,11 @@
                 <div class="row g-4 mb-4">
                     <div class="col-md-6">
                         <label class="form-label text-muted small fw-bold">البريد الإلكتروني</label>
-                        <p class="border-bottom pb-2 text-dark">{{ current_user.email }}</p>
+                        <p class="border-bottom pb-2 text-dark mb-0">{{ current_user.email }}</p>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label text-muted small fw-bold">رقم الهاتف</label>
-                        <p class="border-bottom pb-2 text-dark">{{ current_user.phone or 'غير مسجل' }}</p>
+                        <p class="border-bottom pb-2 text-dark mb-0">{{ current_user.phone or 'غير مسجل' }}</p>
                     </div>
                 </div>
 
@@ -39,8 +41,102 @@
                 </div>
             </div>
         </div>
+
+        <!-- كارت جدول الحجوزات -->
+        <div class="card border-0 shadow-sm rounded-4 mb-5">
+            <div class="card-header bg-white border-bottom py-3 px-4">
+                <h5 class="fw-bold mb-0 text-dark">
+                    <i class="fas fa-list-alt text-primary me-2"></i>جدول الحجوزات
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                
+                {% if all_bookings %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" class="py-3">#</th>
+                                <th scope="col" class="py-3">الراكب / الحاجز</th>
+                                <th scope="col" class="py-3">خط السير</th>
+                                <th scope="col" class="py-3 text-center">المقاعد المطلوبة</th>
+                                <th scope="col" class="py-3 text-center">تاريخ الحجز</th>
+                                <th scope="col" class="py-3 text-center">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in all_bookings %}
+                            <tr>
+                                <!-- رقم الحجز -->
+                                <td class="fw-bold">#{{ booking.Booking_id }}</td>
+
+                                <!-- اسم صاحب الحجز -->
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-primary-subtle text-primary rounded-circle p-2 me-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0 fw-bold">{{ booking.passenger.username if booking.passenger else (booking.user.username if booking.user else 'مستخدم') }}</h6>
+                                            <small class="text-muted">{{ booking.passenger.email if booking.passenger else (booking.user.email if booking.user else '') }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <!-- تفاصيل الرحلة وخط السير -->
+                                <td>
+                                    {% if booking.trip %}
+                                        <div class="fw-bold text-dark">
+                                            {{ booking.trip.start_way }} <i class="fas fa-arrow-left mx-1 text-muted small"></i> {{ booking.trip.end_way }}
+                                        </div>
+                                        <small class="text-muted">
+                                            <i class="far fa-clock me-1"></i>{{ booking.trip.time }}
+                                        </small>
+                                    {% else %}
+                                        <span class="text-danger small">تم إلغاء الرحلة</span>
+                                    {% endif %}
+                                </td>
+
+                                <!-- عدد المقاعد المحجوزة -->
+                                <td class="text-center">
+                                    <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-bold">
+                                        <i class="fas fa-chair text-primary me-1"></i> {{ booking.requested_chairs }}
+                                    </span>
+                                </td>
+
+                                <!-- وقت الحجز -->
+                                <td class="text-center text-muted small">
+                                    {{ booking.Time.strftime("%Y-%m-%d %I:%M %p") }}
+                                </td>
+
+                                <!-- أزرار التحكم والعمليات -->
+                                <td class="text-center">
+                                    {% if booking.Trip_id %}
+                                    <a href="{{ url_for('trip_routes.details_Trips', trip_id=booking.Trip_id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                        <i class="fas fa-eye me-1"></i> التفاصيل
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% else %}
+                <!-- حالة عدم وجود حجوزات -->
+                <div class="text-center py-5">
+                    <div class="mb-3">
+                        <i class="fas fa-ticket-alt fa-3x text-muted opacity-50"></i>
+                    </div>
+                    <h5 class="fw-bold text-muted">لا توجد حجوزات مسجلة حتى الآن</h5>
+                    <p class="text-muted small mb-0">عند قيام أي راكب بالحجز، ستظهر جميع البيانات هنا.</p>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+
     </div>
 </div>
-
-
 {% endblock %}

@@ -1,10 +1,11 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
-from flask_app.Trip.forms import AddTripForm, UpdateTripForm
+from datetime import date, datetime
+
+from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required
+
+from flask_app import db, models
 from flask_app.models import Car
-from flask_app import models
-from flask_app import db
-from flask_login import login_required, current_user
-from datetime import datetime
+from flask_app.Trip.forms import AddTripForm, UpdateTripForm
 
 trip_routes = Blueprint(
     "trip_routes", __name__, template_folder="templates", static_folder="static"
@@ -14,22 +15,20 @@ trip_routes = Blueprint(
 @trip_routes.route("/Trip")
 @login_required
 def Trip():
-    AllTrips = models.Trip.query.all()
     start_way = request.args.get("start_way")
     end_way = request.args.get("end_way")
+
+    query = models.Trip.query
+
     if start_way:
-        AllTrips = models.Trip.query.filter_by(start_way=start_way).all()
-    elif end_way:
-        AllTrips = models.Trip.query.filter_by(end_way=end_way).all()
-    elif start_way and end_way:
-        AllTrips = models.Trip.query.filter_by(
-            start_way=start_way, end_way=end_way
-        ).all()
-    else:
-        AllTrips = models.Trip.query.all()
+        query = query.filter_by(start_way=start_way)
+    
+    if end_way:
+        query = query.filter_by(end_way=end_way)
+
+    AllTrips = query.all()
 
     return render_template("Trip/Trips.html", AllTrips=AllTrips, title="Trips")
-
 
 @trip_routes.route("/AddTrip", methods=["GET", "POST"])
 @login_required
@@ -57,7 +56,7 @@ def AddTrip():
             user_image=current_user.image,
             start_way=form.StartWay.data,
             end_way=form.EndWay.data,
-            time=str(form.Time.data),
+            time=datetime.combine(date.today(), form.Time.data),
             chair=int(form.ChairCar.data),
             price=float(form.Price.data),
         )
@@ -72,7 +71,6 @@ def AddTrip():
             flash(f"حدث خطأ أثناء الحفظ: {e}", "danger")
 
     if request.method == "GET":
-
         form.Time.data = datetime.now()
 
     return render_template("Trip/Add_Trips.html", form=form, title="Add Trip")
@@ -122,7 +120,7 @@ def UpdateTrip(trip_id):
         form.ChooiceCar.data = Update_trip.car_id
         form.StartWay.data = Update_trip.start_way
         form.EndWay.data = Update_trip.end_way
-        formatted_time = datetime.strptime(Update_trip.time, "%H:%M:%S").time()
+        formatted_time = Update_trip.time
         form.Time.data = formatted_time
         form.ChairCar.data = int(Update_trip.chair)
         form.Price.data = float(Update_trip.price)
@@ -137,10 +135,7 @@ def details_Trips(trip_id):
     all_bookings = models.Bookings.query.filter_by(Trip_id=trip_id).all()
     if request.method == "POST":
         Chear = request.form["requested_chairs"]
-        if int(Chear) <= 0:
-            flash("رجاء إدخال الرقم صحيح", "danger")
-            return redirect(url_for("trip.Trip"))
-        elif Chear.isdigit() == False:
+        if int(Chear) <= 0 or Chear.isdigit() == False:
             flash("رجاء إدخال الرقم صحيح", "danger")
             return redirect(url_for("trip.Trip"))
         elif int(Chear) > int(trips.chair):
@@ -152,18 +147,19 @@ def details_Trips(trip_id):
                 user_id=current_user.user_id,
                 Trip_id=trips.trip_id,
                 requested_chairs=Chear,
+                Time=datetime.now()
             )
             db.session.add(AddBooking)
             db.session.commit()
             flash(f"تم حجز {Chear} مقاعد بنجاح! رحلة سعيدة.", "success")
             return redirect(url_for("trip_routes.Trip"))
+        
 
     return render_template(
         "Trip/details_Trips.html",
         trips=trips,
         chaires=int(trips.chair),
         Car_image=trips.car_image,
-        time=trips.time,
         title="Details Trip",
         all_bookings=all_bookings,
     )

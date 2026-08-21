@@ -1,15 +1,15 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_user, logout_user
+from flask_mail import Message
+
+from flask_app import bcrypt, db, mail
 from flask_app.auth.forms import (
-    SignupForm,
+    Forget_passwordForm,
     LoginForm,
     Reset_passwordForm,
-    Forget_passwordForm,
+    SignupForm,
 )
 from flask_app.models import User
-from flask_app import db, bcrypt, mail
-from flask_mail import Message
-from flask_login import login_user, logout_user, current_user
-from authlib.integrations.flask_client import OAuth
 
 auth = Blueprint("auth", __name__, template_folder="templates", static_folder="static")
 
@@ -22,7 +22,7 @@ def sent_reset_email(user):
         recipients=[user.email],
         body=f"""
         To reset your password, visit the following link:
-        {url_for('auth.Reset_password', token=token, _external=True)}
+        {url_for("auth.Reset_password", token=token, _external=True)}
         If you did not make this request then simply ignore this email and no changes will be made.
         """,
     )
@@ -33,7 +33,6 @@ def sent_reset_email(user):
 def login():
     form = LoginForm()
     if request.method == "POST":
-
         if form.validate_on_submit():
             user = User.query.filter_by(email=form.email.data).first()
             if user and bcrypt.check_password_hash(user.password, form.password.data):
@@ -58,7 +57,6 @@ def signup():
     form = SignupForm()
     if request.method == "POST":
         if form.validate_on_submit():
-            
             hash_pass = bcrypt.generate_password_hash(form.password.data).decode(
                 "utf-8"
             )
@@ -82,7 +80,6 @@ def signup():
     return render_template("auth_html/signup.html", form=form)
 
 
-
 @auth.route("/Forget_password", methods=["GET", "POST"])
 def Forget():
     if current_user.is_authenticated:
@@ -96,7 +93,7 @@ def Forget():
                 "An email has been sent with instructions to reset your password.",
                 "info",
             )
-            return redirect(url_for("auth.login"),code=201)
+            return redirect(url_for("auth.login"), code=201)
 
     return render_template("auth_html/Forgetpassword.html", form=form)
 

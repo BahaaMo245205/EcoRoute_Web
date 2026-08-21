@@ -58,7 +58,11 @@
                     <div class="d-grid mt-4">
                         {{ form.submit(class="btn btn-dark btn-lg rounded-pill fw-bold py-3 shadow-sm") }}
                     </div>
-                </form>
+                    <div class="text-center mt-3">
+                        <a href="{{ url_for('user_routes.profile') }}" class="text-decoration-none text-muted small">
+                            <i class="fas fa-arrow-right me-1"></i> العودة للملف الشخصي
+                        </a>                
+                    </form>
             </div>
 
             <div class="card-footer text-center bg-light py-3 border-0">
